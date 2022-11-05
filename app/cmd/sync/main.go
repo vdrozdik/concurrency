@@ -1,13 +1,14 @@
 package main
 
 import (
+	"concurrency/book"
 	"fmt"
 	"math/rand"
 	"sync"
 	"time"
 )
 
-var cache = map[int]Book{}
+var cache = map[int]book.Book{}
 var rnd = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 func main() {
@@ -37,16 +38,16 @@ func main() {
 	wg.Wait()
 }
 
-func queryCache(id int, m *sync.RWMutex) (Book, bool) {
+func queryCache(id int, m *sync.RWMutex) (book.Book, bool) {
 	m.RLock()
 	b, ok := cache[id]
 	m.RUnlock()
 	return b, ok
 }
 
-func queryDatabase(id int, m *sync.RWMutex) (Book, bool) {
+func queryDatabase(id int, m *sync.RWMutex) (book.Book, bool) {
 	time.Sleep(100 * time.Millisecond)
-	for _, b := range books {
+	for _, b := range book.Books {
 		if b.ID == id {
 			m.Lock()
 			cache[id] = b
@@ -54,5 +55,5 @@ func queryDatabase(id int, m *sync.RWMutex) (Book, bool) {
 			return b, true
 		}
 	}
-	return Book{}, false
+	return book.Book{}, false
 }

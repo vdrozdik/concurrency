@@ -1,4 +1,4 @@
-package main
+package book
 
 import "fmt"
 
@@ -17,7 +17,7 @@ func (b Book) String() string {
 	)
 }
 
-var books = []Book{
+var Books = []Book{
 	Book{
 		ID:            1,
 		Title:         "Title1",
